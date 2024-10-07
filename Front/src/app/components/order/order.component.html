@@ -1,0 +1,83 @@
+<div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-body">
+        <h2 class="text-center mb-4">Crear Pedido</h2>
+        
+        <form (ngSubmit)="onSubmit()" #orderForm="ngForm">
+          
+          <!-- Productos -->
+          <div class="mb-3">
+            <label for="product" class="form-label">Productos</label>
+            <div *ngFor="let product of products; let i = index" class="input-group mb-2">
+              
+              <!-- Dropdown para seleccionar el producto -->
+              <select 
+                [(ngModel)]="products[i].name" 
+                name="product-{{i}}" 
+                class="form-select" 
+                required 
+                #productName="ngModel"
+                (change)="updateProductPrice(i)">
+                <option value="" disabled selected>Selecciona un producto</option>
+                <option *ngFor="let availableProduct of availableProducts" 
+                        [value]="availableProduct.name">
+                  {{ availableProduct.name }}
+                </option>
+              </select>
+  
+              <!-- Mostrar precio del producto seleccionado (solo lectura) -->
+              <div class="form-control">
+                Precio: <span>{{ products[i].price | currency:'USD' }}</span>
+              </div>
+  
+              <!-- Cantidad -->
+              <input 
+                type="number" 
+                [(ngModel)]="products[i].quantity" 
+                name="quantity-{{i}}" 
+                class="form-control" 
+                placeholder="Cantidad" 
+                required 
+                min="1"
+                #productQuantity="ngModel"
+              />
+  
+              <!-- Botón para eliminar el producto -->
+              <button 
+                type="button" 
+                class="btn btn-danger" 
+                (click)="removeProduct(i)">
+                Eliminar
+              </button>
+            </div>
+            <button 
+              type="button" 
+              class="btn btn-primary mb-3" 
+              (click)="addProduct()">
+              Agregar Producto
+            </button>
+          </div>
+  
+          <!-- Dirección -->
+          <!-- (Aquí la parte de la dirección como está en tu código) -->
+  
+          <!-- Botón para enviar el pedido -->
+          <button 
+            type="submit" 
+            class="btn btn-success w-100">
+            Hacer Pedido
+          </button>
+        </form>
+  
+        <!-- Mostrar mensaje de error del servicio si lo hay -->
+        <div *ngIf="orderMessage" class="alert alert-info mt-3">
+          {{ orderMessage }}
+        </div>
+  
+        <!-- Mostrar mensaje de error si hubo algún fallo en el servicio -->
+        <div *ngIf="serviceErrorMessage" class="alert alert-danger mt-3">
+          {{ serviceErrorMessage }}
+        </div>
+      </div>
+    </div>
+  </div>
